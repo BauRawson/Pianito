@@ -62,6 +62,17 @@ describe('content', () => {
           expect(accEnd).toBeLessThanOrEqual(songEnd + 0.01);
           expect(accEnd).toBeGreaterThan(songEnd - bpb + 0.01);
         }
+        if (s.vocalMelody) {
+          expect(s.vocalMelody.length).toBeGreaterThan(8);
+          for (const n of s.vocalMelody) {
+            expect(Number.isFinite(n.pitch)).toBe(true);
+            expect(n.beat).toBeGreaterThanOrEqual(0);
+            expect(n.dur).toBeGreaterThan(0);
+            expect(n.beat + n.dur).toBeLessThanOrEqual(songEnd + 0.01);
+          }
+          // The guide is automatic; every one of its events must reach the backing scheduler.
+          expect(chart.accomp.filter((n) => n.instrument === 'voice')).toHaveLength(s.vocalMelody.length);
+        }
       });
 
       it('can be completed with a perfect score by a simulated player', () => {

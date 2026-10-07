@@ -137,7 +137,7 @@ export class GameSession {
       const ev = acc[this.accompCursor++];
       const songT = ev.time;
       if (songT < heardNow - this.origin - 0.05) continue; // skip stale events after resume
-      this.audio.noteOn(ev.pitch, { bus: 'music', velocity: 0.55, when: this.audio.toCtxTime(this.origin + songT), duration: ev.dur });
+      this.audio.noteOn(ev.pitch, { bus: 'music', instrument: ev.instrument, velocity: 0.55, when: this.audio.toCtxTime(this.origin + songT), duration: ev.dur });
     }
     const beatDur = this.chart.beatDur;
     const lastBeat = Math.ceil(this.chart.duration / beatDur);

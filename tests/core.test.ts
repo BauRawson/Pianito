@@ -86,6 +86,22 @@ describe('notation and charts', () => {
   it('removes duplicate notes', () => {
     expect(buildChart(song('C4+C4')).notes).toHaveLength(1);
   });
+  it('keeps vocal guides out of scored notes and scales all backing with tempo', () => {
+    const source = {
+      ...song('C4:4', 120),
+      accompaniment: parseSeq('G3:2'),
+      vocalMelody: parseSeq('R:2 E4:4'),
+    };
+    const chart = buildChart(source, 0.5);
+    expect(chart.notes).toHaveLength(1);
+    expect(chart.notes[0].pitch).toBe(60);
+    expect(chart.accomp).toEqual([
+      { pitch: 55, time: 0, dur: 2 },
+      { pitch: 64, time: 2, dur: 4, instrument: 'voice' },
+    ]);
+    expect(chart.duration).toBe(6);
+    expect(buildChart(source, 1.25).duration).toBeCloseTo(2.4);
+  });
 });
 
 describe('timing judge', () => {

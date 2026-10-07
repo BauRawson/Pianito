@@ -1,6 +1,6 @@
 // Arcade songs: fuller arrangements with accompaniment, tuned for score chasing.
 import { parseSeq } from '../core/chart';
-import { oompah, pads } from './helpers';
+import { oompah, pads, pianoPart } from './helpers';
 import type { Song } from './types';
 
 const ORIGINAL = { en: 'Pianito original', es: 'Original de Pianito' };
@@ -14,28 +14,28 @@ const SONGS: Song[] = [
   // ── Pop favourites: short, simplified excerpts, transposed for the keyboard.
   // Pitch references and arrangement notes are listed in README.md.
   {
-    id: 'arc-somewhere-only-we-know', difficulty: 2, bpm: 86, timeSig: [4, 4],
+    id: 'arc-somewhere-only-we-know', difficulty: 3, bpm: 86, timeSig: [4, 4],
     credit: { en: 'Keane — Tim Rice-Oxley, Tom Chaplin & Richard Hughes', es: 'Keane — Tim Rice-Oxley, Tom Chaplin y Richard Hughes' },
     title: { en: 'Somewhere Only We Know (excerpt)', es: 'Somewhere Only We Know (fragmento)' },
-    objective: { en: 'A verse and chorus in C: repeated notes, short pickups and wide leaps.', es: 'Estrofa y estribillo en Do: notas repetidas, entradas cortas y saltos amplios.' },
-    notes: parseSeq('R:2 C4:.5 G4:.5 G4:.5 E4:.5 | E4 E4:.5 E4:.5 E4:2 | F4 F4:.5 F4:.5 F4 F4 | F4:.5 F4:.5 F4:.5 E4:.5 D4:.5 E4:.5 F4:.5 E4:.5 | R:2 C4:.5 G4:.5 G4:.5 E4:.5 | E4 E4:.5 E4:.5 F4 E4 | F4 F4:.5 F4:.5 F4 F4 | F4:.5 F4:.5 F4 E4:.5 D4:.5 F4:.5 E4:.5 | E4 C5 C5 A4 | E4 G4 G4 E4 | F3 F4 F4 F4 | F4:.5 F4:.5 F4:.5 F4:.5 E4:.5 D4:.5 E4:.5 F4:.5 | E4 C5 C5 A4 | E4 E4:.5 E4:.5 G4 G4 | F4 F4:.5 F4:.5 F4 E4 | D4 E4:.5 F4:.5 E4:2'),
-    accompaniment: pads('C C Dm G C C Dm G Am Em F G Am Em F G,C'),
+    objective: { en: 'Play steady piano chord pulses in C while a wordless voice carries the verse and chorus.', es: 'Toca acordes de piano constantes en Do mientras una voz sin palabras lleva la estrofa y el estribillo.' },
+    vocalMelody: parseSeq('R:2 C4:.5 G4:.5 G4:.5 E4:.5 | E4 E4:.5 E4:.5 E4:2 | F4 F4:.5 F4:.5 F4 F4 | F4:.5 F4:.5 F4:.5 E4:.5 D4:.5 E4:.5 F4:.5 E4:.5 | R:2 C4:.5 G4:.5 G4:.5 E4:.5 | E4 E4:.5 E4:.5 F4 E4 | F4 F4:.5 F4:.5 F4 F4 | F4:.5 F4:.5 F4 E4:.5 D4:.5 F4:.5 E4:.5 | E4 C5 C5 A4 | E4 G4 G4 E4 | F3 F4 F4 F4 | F4:.5 F4:.5 F4:.5 F4:.5 E4:.5 D4:.5 E4:.5 F4:.5 | E4 C5 C5 A4 | E4 E4:.5 E4:.5 G4 G4 | F4 F4:.5 F4:.5 F4 E4 | D4 E4:.5 F4:.5 E4:2'),
+    notes: pianoPart('C C Dm G C C Dm G Am Em F G Am Em F G,C', 'pulse'),
   },
   {
-    id: 'arc-angels', difficulty: 3, bpm: 76, timeSig: [4, 4],
+    id: 'arc-angels', difficulty: 2, bpm: 76, timeSig: [4, 4],
     credit: { en: 'Robbie Williams — Robbie Williams & Guy Chambers', es: 'Robbie Williams — Robbie Williams y Guy Chambers' },
     title: { en: 'Angels (excerpt)', es: 'Angels (fragmento)' },
-    objective: { en: 'A ballad in C: leave space between phrases, then climb into the chorus.', es: 'Una balada en Do: deja espacio entre frases y sube al estribillo.' },
-    notes: parseSeq('C4 E4 D4 C4 | E4:.5 G4:.5 A4:.5 G4:.5 E4:.5 G4:.5 A4:.5 G4:.5 | G4:2 R:2 | C4 E4 D4 C4 | C4:.5 E4:.5 D4:.5 E4:.5 D4 E4 | E4 D4 E4 G4 | G4:2 R:2 | C4 E4 D4 C4 | C4 E4 G4 D5 | D5 D5:.5 C5:.5 D5 C5 | E5 D5:3 | C5 C5:.5 C5:.5 C5 C5 | A4 D5 C5:2 | A4 A4 A4 A4 | G4 G4:3 | C4:4'),
-    accompaniment: pads('C F G C F F G C G G Dm Dm F F C C'),
+    objective: { en: 'Play gentle piano chords every two beats in C, with an automatic wordless vocal guide.', es: 'Toca acordes suaves de piano cada dos tiempos en Do, con una guía vocal automática sin palabras.' },
+    vocalMelody: parseSeq('C4 E4 D4 C4 | E4:.5 G4:.5 A4:.5 G4:.5 E4:.5 G4:.5 A4:.5 G4:.5 | G4:2 R:2 | C4 E4 D4 C4 | C4:.5 E4:.5 D4:.5 E4:.5 D4 E4 | E4 D4 E4 G4 | G4:2 R:2 | C4 E4 D4 C4 | C4 E4 G4 D5 | D5 D5:.5 C5:.5 D5 C5 | E5 D5:3 | C5 C5:.5 C5:.5 C5 C5 | A4 D5 C5:2 | A4 A4 A4 A4 | G4 G4:3 | C4:4'),
+    notes: pianoPart('C F G C F F G C G G Dm Dm F F C C', 'ballad'),
   },
   {
-    id: 'arc-the-scientist', difficulty: 2, bpm: 76, timeSig: [4, 4],
+    id: 'arc-the-scientist', difficulty: 3, bpm: 76, timeSig: [4, 4],
     credit: { en: 'Coldplay — Chris Martin, Jonny Buckland, Guy Berryman & Will Champion', es: 'Coldplay — Chris Martin, Jonny Buckland, Guy Berryman y Will Champion' },
     title: { en: 'The Scientist (verse)', es: 'The Scientist (estrofa)' },
-    objective: { en: 'A slow verse in C: return to the same phrase over changing chords.', es: 'Una estrofa lenta en Do: repite la frase sobre acordes que cambian.' },
-    notes: parseSeq('C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | G3:.5 C4:.5 D4:.5 C4:.5 E4 E4 | E4 E4 D4 C4 | C4:2 R:2 | R:4 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 E4 E4 | E4 E4 D4 C4 | C4:4 | C4:4'),
-    accompaniment: pads('Am Am F F C C C C Am Am F F C C C C'),
+    objective: { en: 'Play the repeated piano chords of the verse in C while a wordless voice carries the melody.', es: 'Toca los acordes repetidos de piano de la estrofa en Do mientras una voz sin palabras lleva la melodía.' },
+    vocalMelody: parseSeq('C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | G3:.5 C4:.5 D4:.5 C4:.5 E4 E4 | E4 E4 D4 C4 | C4:2 R:2 | R:4 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 G4 E4 | E4:2 R:2 | C4:.5 D4:.5 C4 E4 E4 | E4 E4 D4 C4 | C4:4 | C4:4'),
+    notes: pianoPart('Am Am F F C C C C Am Am F F C C C C', 'pulse'),
   },
   {
     id: 'arc-clocks', difficulty: 4, bpm: 120, timeSig: [4, 4],
@@ -49,9 +49,9 @@ const SONGS: Song[] = [
     id: 'arc-someone-like-you', difficulty: 3, bpm: 68, timeSig: [4, 4],
     credit: { en: 'Adele — Adele Adkins & Dan Wilson', es: 'Adele — Adele Adkins y Dan Wilson' },
     title: { en: 'Someone Like You (chorus)', es: 'Someone Like You (estribillo)' },
-    objective: { en: 'A chorus in C: low melody notes, gentle syncopation and sustained endings.', es: 'Un estribillo en Do: melodía grave, síncopas suaves y finales sostenidos.' },
-    notes: parseSeq('C4:.5 C4:.5 C4 B3 B3 | A3:2 R:2 | A3:.5 B3:.5 B3:.5 C4:.5 A3:2 | R:4 | A3 B3 C4:.5 G3:.5 G3 | C4 B3 B3:.5 C4:.5 A3 | C4:2 R:2 | R:4 | E4 E4:.5 E4:.5 E4 G4 | E4:2 R:2 | F4:.5 E4:.5 D4 C4 E4 | E4 D4:.5 C4:.5 A3:2 | C4 C4 C4 C4 | G3 G3:3 | G3 A3 G3 G3 | A3 A3:3'),
-    accompaniment: pads('C G Am F C G Am F C G Am F C G Am F'),
+    objective: { en: 'Play rolling piano arpeggios in C under a wordless vocal guide; keep the eighth notes even.', es: 'Toca arpegios de piano en Do con una guía vocal sin palabras; mantén las corcheas parejas.' },
+    vocalMelody: parseSeq('C4:.5 C4:.5 C4 B3 B3 | A3:2 R:2 | A3:.5 B3:.5 B3:.5 C4:.5 A3:2 | R:4 | A3 B3 C4:.5 G3:.5 G3 | C4 B3 B3:.5 C4:.5 A3 | C4:2 R:2 | R:4 | E4 E4:.5 E4:.5 E4 G4 | E4:2 R:2 | F4:.5 E4:.5 D4 C4 E4 | E4 D4:.5 C4:.5 A3:2 | C4 C4 C4 C4 | G3 G3:3 | G3 A3 G3 G3 | A3 A3:3'),
+    notes: pianoPart('C G Am F C G Am F C G Am F C G Am F', 'arpeggio'),
   },
   // ── Popular classics & sing-alongs (all public domain; original simplified arrangements)
   {

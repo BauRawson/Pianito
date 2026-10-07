@@ -101,9 +101,10 @@ export class AudioEngine {
 
   // ---------------------------------------------------------------- sound
 
-  noteOn(midi: number, opts: { velocity?: number; bus?: Bus; when?: number; duration?: number } = {}): Voice {
+  noteOn(midi: number, opts: { velocity?: number; bus?: Bus; when?: number; duration?: number; instrument?: 'voice' } = {}): Voice {
     const c = this.ensure();
     if (!c) return { stop() {} };
+    if (opts.instrument === 'voice') return this.vocalNote(midi, opts);
     const vel = opts.velocity ?? 0.8;
     const t = Math.max(opts.when ?? 0, c.currentTime);
     const f = midiToFreq(midi);
@@ -189,6 +190,68 @@ export class AudioEngine {
     };
     if (opts.duration !== undefined) voice.stop(t + opts.duration);
     if (opts.bus === 'music') this.scheduled.add(voice);
+    return voice;
+  }
+
+  /** Wordless "ah" guide: vowel formants, a soft envelope and delayed vibrato. */
+  private vocalNote(midi: number, opts: { velocity?: number; when?: number; duration?: number }): Voice {
+    const c = this.ctx!;
+    const t = Math.max(opts.when ?? 0, c.currentTime);
+    const source = c.createOscillator();
+    source.type = 'sawtooth';
+    source.frequency.value = midiToFreq(midi);
+    const vibrato = c.createOscillator();
+    vibrato.frequency.value = 5.2;
+    const depth = c.createGain();
+    depth.gain.setValueAtTime(0, t);
+    depth.gain.linearRampToValueAtTime(9, t + 0.25);
+    vibrato.connect(depth);
+    depth.connect(source.detune);
+
+    const envelope = c.createGain();
+    envelope.gain.setValueAtTime(0, t);
+    envelope.gain.linearRampToValueAtTime(0.55 * (opts.velocity ?? 0.55), t + 0.035);
+    // A separate release gain allows pause to override a future scheduled release.
+    const release = c.createGain();
+    envelope.connect(release);
+    release.connect(this.music);
+    const nodes: AudioNode[] = [source, vibrato, depth, envelope, release];
+    for (const [frequency, gain, q] of [[750, 1, 5], [1150, 0.55, 7], [2600, 0.18, 9]]) {
+      const formant = c.createBiquadFilter();
+      formant.type = 'bandpass';
+      formant.frequency.value = frequency;
+      formant.Q.value = q;
+      const level = c.createGain();
+      level.gain.value = gain;
+      source.connect(formant);
+      formant.connect(level);
+      level.connect(envelope);
+      nodes.push(formant, level);
+    }
+
+    source.start(t);
+    vibrato.start(t);
+    let cut = false;
+    let released = false;
+    const voice: Voice = {
+      stop: (at?: number) => {
+        if (cut || (at !== undefined && released)) return;
+        const now = c.currentTime;
+        if (at === undefined) cut = true;
+        else released = true;
+        const end = at === undefined ? now : Math.max(at, t);
+        release.gain.cancelScheduledValues(end);
+        release.gain.setTargetAtTime(0, end, 0.025);
+        const stopAt = at === undefined && t > now ? now : end + 0.2;
+        try { source.stop(stopAt); vibrato.stop(stopAt); } catch { /* already stopped */ }
+      },
+    };
+    source.onended = () => {
+      nodes.forEach((n) => n.disconnect());
+      this.scheduled.delete(voice);
+    };
+    this.scheduled.add(voice);
+    voice.stop(t + (opts.duration ?? 1));
     return voice;
   }
 

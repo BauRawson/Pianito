@@ -93,17 +93,21 @@ accompaniment: oompah('C G C', 4),              // generated backing
 
 Each song has a title, BPM, time signature, difficulty, an educational objective, credits, its notes and optional accompaniment. Lessons also have intro text, focus keys, and staff/metronome defaults.
 
+`notes` is always the part the player performs and is scored on. An optional `vocalMelody: parseSeq('…')` plays automatically using a wordless synthesized "ah" voice. It shares the Accompaniment volume control and follows tempo changes and pause/resume. It contains no lyrics or artist recordings.
+
 ### Content and licensing
 
 The catalog includes original Pianito exercises, simplified arrangements of public-domain works (traditional tunes, Beethoven, Petzold, Pierpont), and short arrangements of copyrighted pop songs. Pop song credits identify the artists and songwriters; these compositions remain the property of their respective rights holders. There are no recordings or audio samples. Every sound is synthesized at runtime.
 
-The pop arrangements use simplified timing and sustained backing chords, transposed to fit the computer keyboard. Pitch references:
+The pop arrangements are transposed to fit the computer keyboard. The player performs a simplified piano accompaniment while an automatic wordless voice carries the vocal line. Keane uses quarter-note chord pulses (a reduction of the faster original pulse), Angels uses half-note chord pulses, The Scientist uses repeated quarter-note chords, and Adele uses eighth-note broken chords (a reduction of the faster original arpeggios). These are short practice reductions, not full piano transcriptions. Clocks retains its instrumental piano intro, with sustained bass/chord backing and no vocal guide. Vocal pitch and piano references:
 
 - Keane, **Somewhere Only We Know** — verse and chorus, transposed from A to C ([note reference](https://noobnotes.net/somewhere-only-we-know-keane/)).
 - Robbie Williams, **Angels** — opening verse and chorus excerpt in C ([note reference](https://noobnotes.net/angels-robbie-williams/)).
 - Coldplay, **The Scientist** — verse, transposed from F to C ([note reference](https://www.kalimbatabs.net/kalimba-tabs-tutorials/the-scientist-2/)).
 - Coldplay, **Clocks** — repeating piano riff, transposed from E-flat to G and slowed to 120 BPM ([note reference](https://pianoletternotes.blogspot.com/2017/11/clocks-by-coldplay.html)). The final held note is an added practice ending.
 - Adele, **Someone Like You** — chorus excerpt, transposed from A to C ([note reference](https://noobnotes.net/someone-like-you-adele/)).
+
+The Adele piano reduction follows the broken-chord approach described in [Pianote's piano tutorial](https://www.pianote.com/blog/someone-like-you-piano-tutorial/).
 
 ## Advertising (disabled)
 

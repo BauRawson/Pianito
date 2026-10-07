@@ -15,6 +15,8 @@ export interface Song {
   objective: L;
   notes: NoteDef[];
   accompaniment?: NoteDef[];
+  /** Automatic wordless vocal guide; never scored or shown as player notes. */
+  vocalMelody?: NoteDef[];
 }
 
 export interface Lesson extends Song {

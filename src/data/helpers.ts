@@ -70,3 +70,22 @@ export function pads(progression: string, beatsPerBar = 4, startBeat = 0): NoteD
 
 /** Repeats a notation string n times. */
 export const rep = (s: string, n: number): string => Array.from({ length: n }, () => s).join(' ');
+
+/** Playable right-hand piano reduction: chord pulses or rolling broken chords in 4/4. */
+export function pianoPart(progression: string, pattern: 'pulse' | 'ballad' | 'arpeggio'): NoteDef[] {
+  const out: NoteDef[] = [];
+  const step = pattern === 'arpeggio' ? 0.5 : pattern === 'ballad' ? 2 : 1;
+  bars(progression).forEach((bar, bi) => {
+    for (const ch of chordsInBar(bar, 4)) {
+      if (ch.name === 'R') continue;
+      const chord = CHORDS[ch.name];
+      if (!chord) throw new Error(`Unknown chord ${ch.name}`);
+      const tones = chord.tones.map((p) => p + 12);
+      for (let i = 0; i * step < ch.len; i++) {
+        const pitches = pattern === 'arpeggio' ? [tones[[0, 1, 2, 1][i % 4]]] : tones;
+        for (const pitch of pitches) out.push({ pitch, beat: bi * 4 + ch.beat + i * step, dur: Math.min(step, ch.len - i * step) });
+      }
+    }
+  });
+  return out;
+}

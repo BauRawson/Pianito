@@ -17,6 +17,7 @@ export interface SongLike {
   timeSig: [number, number];
   notes: NoteDef[];
   accompaniment?: NoteDef[];
+  vocalMelody?: NoteDef[];
 }
 
 /**
@@ -68,7 +69,7 @@ export interface ChartNote {
   chord: number;
 }
 
-export interface AccompEvent { pitch: number; time: number; dur: number }
+export interface AccompEvent { pitch: number; time: number; dur: number; instrument?: 'voice' }
 
 export interface Chart {
   notes: ChartNote[];
@@ -118,6 +119,7 @@ export function buildChart(song: SongLike, rate = 1): Chart {
   }));
   const accomp = (song.accompaniment ?? [])
     .map((n) => ({ pitch: n.pitch, time: n.beat * beatDur, dur: n.dur * beatDur }))
+    .concat((song.vocalMelody ?? []).map((n) => ({ pitch: n.pitch, time: n.beat * beatDur, dur: n.dur * beatDur, instrument: 'voice' as const })))
     .sort((a, b) => a.time - b.time);
   const duration = Math.max(0, ...notes.map((n) => n.end), ...accomp.map((a) => a.time + a.dur));
   return { notes, accomp, beatDur, beatsPerBar: song.timeSig[0], duration };
