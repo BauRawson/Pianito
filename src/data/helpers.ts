@@ -14,6 +14,11 @@ const CHORDS: Record<string, { bass: number; tones: number[] }> = {
   A: { bass: 45, tones: [49, 52, 57] },
   A7: { bass: 45, tones: [49, 52, 55] },
   Bm: { bass: 47, tones: [50, 54, 59] },
+  B: { bass: 47, tones: [51, 54, 59] },
+  Cm: { bass: 36, tones: [48, 51, 55] },
+  Fm: { bass: 41, tones: [48, 53, 56] },
+  Ab: { bass: 44, tones: [48, 51, 56] },
+  Dm7: { bass: 38, tones: [48, 53, 57] },
 };
 
 /** Splits "C F | G C" into bars; a bar "C,G" splits it in halves. */

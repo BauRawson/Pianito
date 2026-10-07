@@ -4,6 +4,7 @@ import { h, svgIcon, ICONS, stars, fmtScore, pct } from './dom';
 import { t, tl, tla } from '../i18n';
 import { LESSONS, LESSON_IDS, WORLDS, lessonById } from '../data/lessons';
 import { ARCADE } from '../data/arcade';
+import type { Song } from '../data/types';
 import { gradeFor } from '../core/progress';
 import { miniPiano } from './piano';
 import { showKeysHelp, showPianoGuide, showTutorial } from './dialogs';
@@ -12,6 +13,15 @@ import { labelForMidi } from '../core/keymap';
 import { noteColor, noteName } from '../core/music';
 
 const PRACTICE_RATE = 0.75;
+
+const DIFF_KEYS = ['diff1', 'diff2', 'diff3', 'diff4', 'diff5'] as const;
+/** Coloured "Easy … Expert" pill with five pips. */
+function difficultyBadge(n: number): HTMLElement {
+  const d = Math.min(5, Math.max(1, Math.round(n)));
+  return h('span', { class: `diff-badge d${d}`, title: `${t('difficulty')}: ${d}/5` },
+    h('span', { class: 'pips', 'aria-hidden': 'true' }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= d ? 'on' : '' }))),
+    t(DIFF_KEYS[d - 1]));
+}
 
 function startPlaying(app: App): void {
   const next = app.progress.nextLesson(LESSON_IDS) ?? LESSON_IDS[0];
@@ -124,7 +134,7 @@ export function learnScreen(app: App): Screen {
             h('span', { class: 'lesson-n' }, done ? svgIcon(ICONS.check, 16) : String(idx)),
             h('strong', null, tl(l.title)),
             h('span', { class: 'obj' }, tl(l.objective)),
-            stars(app.progress.stars(l.id)),
+            h('span', { class: 'card-foot' }, stars(app.progress.stars(l.id)), difficultyBadge(l.difficulty)),
           );
         })),
       );
@@ -165,7 +175,7 @@ export function lessonScreen(app: App, route: Route): Screen {
     h('div', { class: 'intro-card' },
       h('div', { class: 'intro-meta' },
         h('span', { class: 'world-n' }, `${t('world', { n: world.id })} · ${tl(world.title)}`),
-        h('span', { class: 'muted' }, t('lessonN', { n: idx + 1 })),
+        h('span', { class: 'row' }, difficultyBadge(lesson.difficulty), h('span', { class: 'muted' }, t('lessonN', { n: idx + 1 }))),
       ),
       h('h1', null, tl(lesson.title)),
       h('p', { class: 'objective' }, tl(lesson.objective)),
@@ -196,18 +206,12 @@ export function arcadeScreen(app: App): Screen {
     h('input', { type: 'checkbox', checked: hardMode || undefined, onchange: (e: Event) => { hardMode = (e.target as HTMLInputElement).checked; app.refresh(); } }),
     h('span', null, t('hardMode')),
   );
-  const el = h('main', { class: 'arcade page' },
-    touchBanner(app),
-    h('div', { class: 'page-head' },
-      h('div', null, h('h1', null, t('arcade')), h('p', { class: 'muted' }, t('modeArcadeText'))),
-      hardToggle,
-    ),
-    h('div', { class: 'song-grid' }, ARCADE.map((s) => {
+  const card = (s: Song) => {
       const key = hardMode ? `${s.id}:hard` : s.id;
       const rec = app.progress.get(key);
       return h('button', { class: 'song-card', onclick: () => app.go({ name: 'play', id: s.id, mode: 'arcade', hard: hardMode }) },
         h('div', { class: 'song-top' },
-          h('span', { class: 'diff', 'aria-label': `${t('difficulty')} ${s.difficulty}/5` }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= s.difficulty ? 'on' : '' }))),
+          difficultyBadge(s.difficulty),
           h('span', { class: 'bpm' }, `${Math.round(s.bpm * (hardMode ? 1.25 : 1))} BPM`),
         ),
         h('strong', null, tl(s.title)),
@@ -217,7 +221,14 @@ export function arcadeScreen(app: App): Screen {
           ? [h('span', { class: `grade g${gradeFor(rec.bestAccuracy)}` }, gradeFor(rec.bestAccuracy)), h('span', null, fmtScore(rec.bestScore)), h('span', { class: 'muted' }, pct(rec.bestAccuracy)), stars(rec.stars)]
           : h('span', { class: 'muted' }, t('noRecord'))),
       );
-    })),
+  };
+  const el = h('main', { class: 'arcade page' },
+    touchBanner(app),
+    h('div', { class: 'page-head' },
+      h('div', null, h('h1', null, t('arcade')), h('p', { class: 'muted' }, t('modeArcadeText'))),
+      hardToggle,
+    ),
+    h('div', { class: 'song-grid' }, ARCADE.map((s) => card(s))),
   );
   return { el };
 }

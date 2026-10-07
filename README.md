@@ -13,7 +13,7 @@ Coloured notes fall onto a piano keyboard; you play them on your computer keyboa
 | Mode | What it is |
 |---|---|
 | **Learn** | 6 worlds, 25 lessons: after three warm-ups, every lesson is a real song you already know (Hot Cross Buns, Ode to Joy, Twinkle Twinkle, Amazing Grace, Greensleeves, Für Elise, Jingle Bells, The Entertainer…). Tempos start a little below natural speed and rise world by world, and every lesson has a "practice slower (75%)" option. Each lesson opens with a short, interactive explanation ("press the glowing keys") and then you play right away. Stars and completion are tracked, and every lesson stays open. |
-| **Arcade** | 8 full arrangements with accompaniment for scores, combos and S ranks. Hard mode plays them 25 % faster. |
+| **Arcade** | 23 songs and exercises, including simplified pop excerpts by Keane, Robbie Williams, Coldplay and Adele, labelled Easy → Expert, with accompaniment, for scores, combos and S ranks. Hard mode plays them 25 % faster. |
 | **Free Play** | A virtual piano with rising note trails and a sustain pedal (hold Space). |
 
 ## Controls
@@ -67,7 +67,7 @@ src/
     layout.ts      piano key geometry (the keys are the lanes)
     renderer.ts    Canvas highway, falling notes, piano, staff strip, effects
     session.ts     one play-through: timeline, scheduler, judge wiring, render loop
-  data/            lessons (25), arcade songs (8), accompaniment helpers
+  data/            lessons (25), arcade songs (23), accompaniment helpers
   ui/              screens (home, learn, lesson intro, game, arcade, free play, settings), dialogs
   i18n.ts          English / Spanish strings
   config.ts        optional ad slot (disabled by default)
@@ -95,7 +95,15 @@ Each song has a title, BPM, time signature, difficulty, an educational objective
 
 ### Content and licensing
 
-All melodies are either original Pianito exercises or public-domain works (traditional tunes, Beethoven, Petzold, Pierpont) in original simplified arrangements. There are no recordings or third-party assets. Every sound is synthesized at runtime.
+The catalog includes original Pianito exercises, simplified arrangements of public-domain works (traditional tunes, Beethoven, Petzold, Pierpont), and short arrangements of copyrighted pop songs. Pop song credits identify the artists and songwriters; these compositions remain the property of their respective rights holders. There are no recordings or audio samples. Every sound is synthesized at runtime.
+
+The pop arrangements use simplified timing and sustained backing chords, transposed to fit the computer keyboard. Pitch references:
+
+- Keane, **Somewhere Only We Know** — verse and chorus, transposed from A to C ([note reference](https://noobnotes.net/somewhere-only-we-know-keane/)).
+- Robbie Williams, **Angels** — opening verse and chorus excerpt in C ([note reference](https://noobnotes.net/angels-robbie-williams/)).
+- Coldplay, **The Scientist** — verse, transposed from F to C ([note reference](https://www.kalimbatabs.net/kalimba-tabs-tutorials/the-scientist-2/)).
+- Coldplay, **Clocks** — repeating piano riff, transposed from E-flat to G and slowed to 120 BPM ([note reference](https://pianoletternotes.blogspot.com/2017/11/clocks-by-coldplay.html)). The final held note is an added practice ending.
+- Adele, **Someone Like You** — chorus excerpt, transposed from A to C ([note reference](https://noobnotes.net/someone-like-you-adele/)).
 
 ## Advertising (disabled)
 

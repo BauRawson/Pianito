@@ -441,3 +441,12 @@ input, select, textarea { -webkit-user-select: auto; user-select: auto; }
   .res-grid { grid-template-columns: repeat(4, 1fr); }
   .overlay { align-items: start; }
 }
+
+/* ─────────── Difficulty badge */
+.diff-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 7px; border-radius: 999px; font-size: .75rem; font-weight: 900; letter-spacing: .02em; color: #fff; background: var(--dc); white-space: nowrap; }
+.diff-badge .pips { display: inline-flex; gap: 2px; }
+.diff-badge .pips i { width: 5px; height: 9px; border-radius: 2px; background: rgba(255, 255, 255, .35); }
+.diff-badge .pips i.on { background: #fff; }
+.diff-badge.d1 { --dc: #2bb673; } .diff-badge.d2 { --dc: #22a3c3; } .diff-badge.d3 { --dc: #f0a500; } .diff-badge.d4 { --dc: #ff6b3d; } .diff-badge.d5 { --dc: #d6336c; }
+.card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+

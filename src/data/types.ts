@@ -6,7 +6,7 @@ export interface L { en: string; es: string }
 export interface Song {
   id: string;
   title: L;
-  /** Composer / origin credit. All melodies are public domain or original. */
+  /** Artist, composer or origin credit. */
   credit: L;
   bpm: number;
   timeSig: [number, number];
