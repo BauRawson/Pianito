@@ -1,0 +1,19 @@
+{
+  "name": "pianito",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pianito — a free browser piano rhythm game that teaches real piano fundamentals.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.3",
+    "vitest": "^4.1.11"
+  }
+}

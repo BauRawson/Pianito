@@ -1,0 +1,342 @@
+# Build PIANITO — A Free Browser-Based Piano Rhythm Game
+
+You are a senior game developer, frontend engineer, and UI/UX designer.
+
+Build a complete, polished, playable web game called **PIANITO**.
+
+The concept: **Pump It Up / Dance Dance Revolution meets learning to play piano.**
+
+Players use their computer keyboard to hit musical notes as they reach a timing line. Unlike traditional rhythm games, Pianito progressively teaches genuine piano fundamentals.
+
+The experience should feel like an addictive arcade game first, with music education naturally integrated into its progression.
+
+**This is a real product, not a prototype or UI mockup. Implement the entire playable experience.**
+
+## 1. Technical requirements
+
+- Vite + TypeScript.
+- HTML5 Canvas for the gameplay renderer.
+- HTML/CSS for menus and interface.
+- Web Audio API or Tone.js for audio.
+- Runs entirely client-side.
+- Deployable to GitHub Pages.
+- No backend, authentication, databases, or paid services.
+- No API keys.
+- Save progress, settings and records in localStorage.
+- Responsive layout, desktop-first.
+- Support modern Chrome, Firefox, Safari and Edge.
+- No heavyweight game engine required.
+- Keep the architecture modular and readable.
+
+Configure Vite to work with GitHub Pages subdirectory hosting, not just the domain root. Include a GitHub Actions deployment workflow.
+
+## 2. Gameplay
+
+The screen has a vertical rhythm-game highway.
+
+Musical notes descend toward a horizontal judgment line. The player presses the corresponding keyboard keys at the correct time.
+
+At the bottom, display a visual piano keyboard.
+
+Requirements:
+
+- Smooth 60 FPS rendering.
+- Falling notes aligned with their piano keys.
+- Distinct colors for different note lanes.
+- Perfect / Great / Good / Miss judgments.
+- Combos, score, accuracy and end-of-song results.
+- Long notes requiring the player to hold a key.
+- Simultaneous notes and chords.
+- Optional metronome and beat indicators.
+- Adjustable note speed.
+- Retry and pause.
+- Satisfying, restrained visual feedback.
+- Keyboard input must be responsive with minimal perceived latency.
+
+**CRITICAL: Accurate audio synchronization.**
+
+Use a shared audio clock as the authoritative timeline, rather than counting frames.
+
+Schedule musical playback and note timing consistently. Compensate for visual timing differences when appropriate.
+
+Include adjustable input timing calibration.
+
+Scoring should use the difference between expected musical onset time and actual keypress time.
+
+Avoid drift, especially during longer songs.
+
+## 3. Keyboard controls
+
+Support playing notes on a regular computer keyboard.
+
+Provide a sensible musical mapping similar to virtual piano software.
+
+Example:
+
+- A S D F G H J K → consecutive white piano keys.
+- W E T Y U → corresponding black keys.
+- Optional extended range through additional keyboard rows.
+- Highlight pressed keys on the virtual piano.
+- Allow users to view the computer-key labels.
+
+Keep the note mapping musically correct and consistent throughout the application.
+
+Support multiple simultaneous keypresses, key releases and sustained notes.
+
+Handle keyboard ghosting limitations gracefully.
+
+Optional enhancement: Web MIDI API support for connecting a physical digital piano, with computer keyboard always available as the default.
+
+## 4. Actual musical education
+
+The game must introduce piano concepts progressively, without requiring players to read lengthy tutorials.
+
+Build a structured learning path:
+
+**World 1 — Your First Notes**
+- Locate middle C.
+- Learn C, D and E.
+- Play simple sequences.
+- Learn basic rhythmic timing.
+
+**World 2 — The White Keys**
+- Introduce F, G, A and B.
+- Learn an octave.
+- Practice simple melodies.
+- Introduce quarter and half notes.
+
+**World 3 — Rhythm**
+- Different note durations.
+- Rests.
+- Eighth notes.
+- Timing exercises.
+
+**World 4 — Sharps and Flats**
+- Introduce black keys.
+- Explain semitones.
+- Simple chromatic exercises.
+
+**World 5 — Chords**
+- Play multiple notes simultaneously.
+- C major, F major and G major chords.
+- Basic harmony.
+
+**World 6 — Playing Music**
+- Combine everything into recognizable melodies.
+- Increasing difficulty.
+- More complicated musical patterns.
+
+Introduce each concept with a brief interactive explanation, then let the player practice immediately.
+
+Include a visual explanation of the real piano keyboard.
+
+Gradually introduce optional sheet-music notation alongside falling notes.
+
+**Educational integrity matters:** Explain that a computer keyboard is an introduction to note identification and rhythm, not a substitute for learning correct piano fingering or technique.
+
+## 5. Songs and lessons
+
+Create a complete data-driven system for songs and exercises.
+
+Each note should support:
+
+- MIDI pitch number.
+- Start time in beats.
+- Duration in beats.
+- Optional metadata.
+
+Each song should support:
+
+- Title.
+- BPM.
+- Time signature.
+- Difficulty.
+- Educational objective.
+- Note sequence.
+- Optional accompaniment.
+
+Build at least **20 actually playable lessons**, progressing from trivial single-note exercises to recognizable beginner melodies and simple chords.
+
+Include public-domain melodies where appropriate, such as Ode to Joy and Twinkle Twinkle Little Star, using original arrangements or appropriately licensed material.
+
+Do not use copyrighted recordings or unlicensed assets.
+
+Use procedurally synthesized piano audio or bundled openly licensed piano samples.
+
+**Never ship silent placeholders or fake songs.**
+
+## 6. Game modes
+
+Implement three modes:
+
+**Learn**
+A progressive lesson campaign with educational explanations and completion tracking.
+
+**Arcade**
+Play songs for scores, combos and high ratings. Introduce increasing difficulty and replayability.
+
+**Free Play**
+A virtual piano with no falling notes. Players can freely experiment with the mapped keys.
+
+All three modes should share the same audio and input systems.
+
+## 7. Visual design
+
+Create a highly polished, charming, modern arcade interface.
+
+Visual direction:
+
+- Bright, playful, welcoming.
+- Clean typography.
+- Strong readability.
+- Soft gradients and appealing colors.
+- Excellent contrast between notes and their lanes.
+- Smooth, tasteful animations.
+- Piano-themed visual elements.
+- A bit of rhythm-game energy without overwhelming beginners.
+
+Avoid generic AI-generated SaaS dashboards.
+
+Make this look like an actual game someone would enjoy playing.
+
+The landing page should immediately communicate what Pianito does.
+
+Primary CTA: **PLAY NOW**
+
+Secondary CTA: **FREE PLAY**
+
+No sign-up prompts, pricing pages, subscription dialogs or unnecessary onboarding.
+
+The player should be able to begin playing within seconds.
+
+## 8. User experience
+
+- Display a short interactive tutorial on the first launch.
+- Keep explanations concise.
+- Allow skipping tutorials.
+- Let players replay any completed lesson.
+- Save lesson completion, high scores and preferences locally.
+- Display stars or medals based on performance.
+- Include volume controls and audio mute.
+- Include keyboard mapping help.
+- Offer English and Spanish UI translations.
+- Respect reduced-motion preferences.
+- Handle browser audio autoplay restrictions properly.
+- Show a friendly message when a device lacks a physical keyboard.
+- Optionally support a touch piano for free play and simple lessons.
+
+Do not make players create an account.
+
+## 9. Monetization
+
+The website is **100% free forever**.
+
+All songs, lessons and functionality must remain available without payment.
+
+No paywalls, subscriptions, premium accounts or locked content.
+
+Design an unobtrusive optional advertising placement outside the gameplay area, disabled by default.
+
+Never display advertisements over the piano, falling notes or judgment area.
+
+Do not load advertisement scripts unless explicitly configured later.
+
+## 10. Code architecture
+
+Separate concerns cleanly:
+
+- Game loop and renderer.
+- Audio engine.
+- Musical timeline and note scheduler.
+- Input management.
+- Timing judgments.
+- Song and lesson definitions.
+- Progress tracking.
+- UI components.
+- Settings.
+- Localization.
+
+Use a deterministic, testable scoring system.
+
+Include automated tests for note timing, scoring, chord detection, long-note handling and progression logic.
+
+Avoid unnecessary dependencies.
+
+## 11. Deployment
+
+Include:
+
+- A working package.json.
+- Appropriate TypeScript configuration.
+- Vite configuration.
+- GitHub Pages deployment workflow.
+- Clear README.
+- Development and production build commands.
+- Instructions for deploying from a GitHub repository.
+
+All assets must be available locally or bundled.
+
+No server-side functionality.
+
+## 12. Acceptance criteria
+
+Before considering the project finished:
+
+1. The app builds successfully.
+2. The landing page works.
+3. The player can start the first lesson.
+4. Notes fall at the correct speed.
+5. Keyboard presses produce audible, correctly pitched notes.
+6. Accurate timing judgments work.
+7. Missed notes register correctly.
+8. Chords and sustained notes work.
+9. All 20 lessons are playable from beginning to end.
+10. Results and progression save locally.
+11. Arcade and Free Play modes work.
+12. Refreshing the page preserves progress.
+13. The production build works on GitHub Pages.
+14. There are no critical runtime errors.
+
+Test these systems and fix discovered issues.
+
+## Final instructions
+
+Make reasonable product and technical decisions independently.
+
+Do not stop at planning, scaffolding, or generating placeholder screens.
+
+Implement a complete, cohesive, functional product.
+
+Prioritize responsive gameplay, accurate musical timing, pleasant piano sound and an excellent first-time user experience.
+
+**The ultimate goal: someone who has never touched a piano should have fun immediately, and after 30 minutes should genuinely understand more about musical notes and rhythm than when they started.**
+
+
+## CRITICAL — Gameplay Visualization
+
+The gameplay must resemble **Pump It Up / Synthesia**, with notes falling vertically from the top of the screen toward a piano keyboard at the bottom.
+
+- Display a horizontal piano keyboard at the bottom of the screen.
+- Every falling note must be **horizontally aligned with its corresponding piano key**.
+- The falling notes should look like colored rectangular blocks, not arrows.
+- Each falling note displays its **computer keyboard letter prominently** (A, S, D, F, etc.).
+- Optionally display the musical note name (C4, D4, E4) underneath in smaller text.
+- White-key notes should be visually distinct from black-key notes.
+- Notes travel downward at a consistent speed, synchronized with the music.
+- When a falling note reaches its corresponding piano key, the player must press the displayed computer keyboard letter.
+- Successful hits trigger a satisfying visual effect directly on the piano key.
+- Sustained notes appear as elongated blocks indicating how long the key must be held.
+- Simultaneous notes appear side by side, aligned with their individual keys.
+- The piano keyboard must visibly react when physical keyboard keys are pressed.
+
+**Important:** The piano keyboard is the lane layout itself. Do NOT create arbitrary equal-width rhythm-game lanes disconnected from the piano keys.
+
+For beginners, display both labels:
+
+**A** — large, primary label (computer key)
+
+**C4** — smaller, secondary label (musical note)
+
+Allow players to toggle between keyboard letters, musical note names, or both.
+
+The result should feel like playing an arcade rhythm game, while naturally teaching the relationship between computer keyboard keys, musical notes and piano positions.
