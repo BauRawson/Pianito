@@ -17,7 +17,7 @@ export function gameScreen(app: App, route: Route): Screen {
   const rate = route.rate ?? (route.mode === 'arcade' && route.hard ? 1.25 : 1);
   const recordKey = route.mode === 'arcade' && route.hard ? `${song.id}:hard` : song.id;
   const s = app.settings.get();
-  const staff = s.sheetMusic === 'on' || (s.sheetMusic === 'auto' && !!lesson?.staff);
+  const staff = !app.touchOnly && (s.sheetMusic === 'on' || (s.sheetMusic === 'auto' && !!lesson?.staff));
 
   const scoreEl = h('span', { class: 'hud-val' }, '0');
   const comboEl = h('span', { class: 'hud-val' }, '0');
@@ -38,7 +38,7 @@ export function gameScreen(app: App, route: Route): Screen {
       ),
       h('div', { class: 'hud-progress' }, progEl),
     ),
-    h('div', { class: 'stage' }, canvas, app.touchOnly ? h('div', { class: 'touch-hint' }, t('touchHint')) : null, overlay),
+    h('div', { class: 'stage' }, canvas, h('div', { class: 'rotate-hint' }, h('span', { class: 'rotate-icon', 'aria-hidden': 'true' }, '📱'), t('rotate')), app.touchOnly ? h('div', { class: 'touch-hint' }, t('touchHint')) : null, overlay),
   );
 
   let session: GameSession | null = null;
@@ -53,6 +53,7 @@ export function gameScreen(app: App, route: Route): Screen {
       song, rate, staff,
       metronome: app.settings.get().metronome || !!lesson?.metronome,
       focus: lesson?.focus,
+      mobile: app.touchOnly,
     }, app.audio, app.input, app.settings, {
       hud: (hd) => {
         scoreEl.textContent = fmtScore(hd.score);

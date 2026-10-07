@@ -134,6 +134,7 @@ export function createApp(root: HTMLElement, screens: Record<Route['name'], Scre
   const app: App = {
     audio, input, settings, progress, touchOnly,
     go(r) {
+      if (touchOnly) setImmersive(r.name === 'play' || r.name === 'free');
       route = r;
       const hash = toHash(r);
       if (hash !== null && hash !== location.hash) history.pushState(null, '', hash || '#/');
@@ -147,6 +148,22 @@ export function createApp(root: HTMLElement, screens: Record<Route['name'], Scre
   route = fromHash();
   render();
   return app;
+}
+
+/** Mobile: fullscreen + landscape for gameplay (best effort; iOS Safari has neither API). */
+function setImmersive(on: boolean): void {
+  const doc = document as Document & { webkitFullscreenElement?: Element; webkitExitFullscreen?: () => void };
+  const el = document.documentElement as HTMLElement & { webkitRequestFullscreen?: () => void };
+  try {
+    if (on && !(document.fullscreenElement || doc.webkitFullscreenElement)) {
+      const p = el.requestFullscreen?.({ navigationUI: 'hide' }) ?? el.webkitRequestFullscreen?.();
+      Promise.resolve(p).then(() => {
+        (screen.orientation as ScreenOrientation & { lock?: (o: string) => Promise<void> }).lock?.('landscape').catch(() => {});
+      }).catch(() => {});
+    } else if (!on && (document.fullscreenElement || doc.webkitFullscreenElement)) {
+      (document.exitFullscreen?.() ?? doc.webkitExitFullscreen?.()) as unknown;
+    }
+  } catch { /* unsupported */ }
 }
 
 export function logoMark(): HTMLElement {

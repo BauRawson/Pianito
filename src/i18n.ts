@@ -119,6 +119,7 @@ const en = {
   sustain: 'Sustain (hold Space)',
   freeHint: 'Play anything! Hold Space for the sustain pedal.',
   audioBlocked: 'Tap anywhere to enable sound',
+  rotate: 'Turn your phone sideways to play',
   footer: 'Made for curious ears. All melodies are public domain or original. Piano sound is synthesized live in your browser.',
 };
 
@@ -238,6 +239,7 @@ const es: Dict = {
   sustain: 'Pedal (mantén Espacio)',
   freeHint: '¡Toca lo que quieras! Mantén Espacio para el pedal de resonancia.',
   audioBlocked: 'Toca en cualquier lugar para activar el sonido',
+  rotate: 'Gira el teléfono para jugar',
   footer: 'Hecho para oídos curiosos. Todas las melodías son de dominio público u originales. El sonido del piano se sintetiza en tu navegador.',
 };
 

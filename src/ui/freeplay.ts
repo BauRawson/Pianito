@@ -21,12 +21,13 @@ export function freePlayScreen(app: App): Screen {
         h('button', { class: 'btn ghost small light', onclick: () => showKeysHelp() }, svgIcon(ICONS.keyboard), t('keysHelp')),
       ),
     ),
-    h('div', { class: 'stage' }, canvas, noteDisplay),
+    h('div', { class: 'stage' }, canvas, h('div', { class: 'rotate-hint' }, h('span', { class: 'rotate-icon', 'aria-hidden': 'true' }, '📱'), t('rotate')), noteDisplay),
   );
 
   const renderer = new Renderer(canvas);
   renderer.trailsEnabled = true;
   renderer.reducedMotion = app.settings.reducedMotion();
+  renderer.mobile = app.touchOnly;
   const voices = new Map<number, Voice>();
   const sustained: Voice[] = [];
   let sustain = false;
@@ -69,7 +70,7 @@ export function freePlayScreen(app: App): Screen {
       time: 0, lookahead: 2, notes: null, states: null,
       lo: KEYBOARD_RANGE.lo, hi: KEYBOARD_RANGE.hi,
       pressed: app.input.pressed(), beatDur: 0, beatsPerBar: 4, beatStart: 0,
-      labels: s.labels, naming: app.settings.naming(), staff: false,
+      labels: app.touchOnly ? 'notes' : s.labels, naming: app.settings.naming(), staff: false,
     }, performance.now());
   };
 

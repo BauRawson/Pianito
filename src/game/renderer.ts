@@ -72,6 +72,8 @@ export class Renderer {
   private popup: Popup | null = null;
   private trails: Trail[] = [];
   reducedMotion = false;
+  /** Touch devices: taller keys for fingers. */
+  mobile = false;
   /** Free-play mode: rising trails instead of falling notes. */
   trailsEnabled = false;
   pianoTop = 0;
@@ -137,7 +139,7 @@ export class Renderer {
     const { w, h } = this;
     c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
 
-    const pianoH = Math.max(80, Math.min(170, h * 0.22));
+    const pianoH = this.mobile ? Math.max(110, Math.min(280, h * 0.42)) : Math.max(80, Math.min(170, h * 0.22));
     const pianoY = h - pianoH;
     this.pianoTop = pianoY;
     const staffH = f.staff ? Math.max(84, Math.min(120, h * 0.17)) : 0;

@@ -17,6 +17,8 @@ export interface SessionOptions {
   staff: boolean;
   metronome: boolean;
   focus?: number[];
+  /** Touch device: taller keys, note names instead of computer-key letters. */
+  mobile?: boolean;
 }
 
 export interface HudState { score: number; combo: number; accuracy: number; progress: number }
@@ -65,6 +67,7 @@ export class GameSession {
     this.judge = new Judge(this.chart.notes);
     this.renderer = new Renderer(canvas);
     this.renderer.reducedMotion = settings.reducedMotion();
+    this.renderer.mobile = !!opts.mobile;
     this.range = rangeFor(this.chart.notes.map((n) => n.pitch));
     this.metronome = opts.metronome;
     this.focus = new Set(opts.focus ?? []);
@@ -225,7 +228,7 @@ export class GameSession {
       beatDur: this.chart.beatDur,
       beatsPerBar: this.chart.beatsPerBar,
       beatStart: -this.chart.beatDur * this.chart.beatsPerBar,
-      labels: s.labels,
+      labels: this.opts.mobile ? 'notes' : s.labels,
       naming: this.settings.naming(),
       staff: this.opts.staff,
       highlight: this.focus,

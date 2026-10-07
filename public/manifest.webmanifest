@@ -1,0 +1,11 @@
+{
+  "name": "Pianito",
+  "short_name": "Pianito",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#191733",
+  "theme_color": "#2a2650",
+  "icons": [{ "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
