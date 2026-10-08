@@ -19,6 +19,18 @@ const CHORDS: Record<string, { bass: number; tones: number[] }> = {
   Fm: { bass: 41, tones: [48, 53, 56] },
   Ab: { bass: 44, tones: [48, 51, 56] },
   Dm7: { bass: 38, tones: [48, 53, 57] },
+  Cmaj7: { bass: 36, tones: [52, 55, 59] },
+  Fmaj7: { bass: 41, tones: [52, 53, 57] },
+  Am7: { bass: 45, tones: [48, 52, 55] },
+  Em7: { bass: 40, tones: [47, 50, 55] },
+  C7: { bass: 36, tones: [52, 55, 58] },
+  Gsus4: { bass: 43, tones: [48, 50, 55] },
+  Csus2: { bass: 36, tones: [48, 50, 55] },
+  Fsus2: { bass: 41, tones: [48, 53, 55] },
+  Dsus2: { bass: 38, tones: [50, 52, 57] },
+  Gm: { bass: 43, tones: [50, 55, 58] },
+  Bb: { bass: 46, tones: [50, 53, 58] },
+  Eb: { bass: 39, tones: [51, 55, 58] },
 };
 
 /** Splits "C F | G C" into bars; a bar "C,G" splits it in halves. */
@@ -71,20 +83,40 @@ export function pads(progression: string, beatsPerBar = 4, startBeat = 0): NoteD
 /** Repeats a notation string n times. */
 export const rep = (s: string, n: number): string => Array.from({ length: n }, () => s).join(' ');
 
-/** Playable right-hand piano reduction: chord pulses or rolling broken chords in 4/4. */
-export function pianoPart(progression: string, pattern: 'pulse' | 'ballad' | 'arpeggio'): NoteDef[] {
+/** Playable piano reduction. In compound meters, durations/BPM count eighth-note units. */
+export function pianoPart(progression: string, pattern: 'pulse' | 'ballad' | 'arpeggio' | 'rocking' | 'syncopated', beatsPerBar = 4): NoteDef[] {
   const out: NoteDef[] = [];
-  const step = pattern === 'arpeggio' ? 0.5 : pattern === 'ballad' ? 2 : 1;
+  const compound = beatsPerBar === 6 || beatsPerBar === 12;
+  const arpeggio = compound ? [0, 1, 2, 1, 2, 1] : [0, 1, 2, 1];
+  const step = pattern === 'arpeggio' ? (compound ? 1 : 0.5) : pattern === 'rocking' ? 0.5 : pattern === 'ballad' ? (compound ? 3 : 2) : 1;
   bars(progression).forEach((bar, bi) => {
-    for (const ch of chordsInBar(bar, 4)) {
+    for (const ch of chordsInBar(bar, beatsPerBar)) {
       if (ch.name === 'R') continue;
       const chord = CHORDS[ch.name];
       if (!chord) throw new Error(`Unknown chord ${ch.name}`);
       const tones = chord.tones.map((p) => p + 12);
-      for (let i = 0; i * step < ch.len; i++) {
-        const pitches = pattern === 'arpeggio' ? [tones[[0, 1, 2, 1][i % 4]]] : tones;
-        for (const pitch of pitches) out.push({ pitch, beat: bi * 4 + ch.beat + i * step, dur: Math.min(step, ch.len - i * step) });
+      let offset = 0;
+      for (let i = 0; offset < ch.len; i++) {
+        const duration = pattern === 'syncopated' ? [1.5, 0.5, 1, 1][i % 4] : step;
+        const pitches = pattern === 'arpeggio' ? [tones[arpeggio[i % arpeggio.length]]]
+          : pattern === 'rocking' ? [tones[i % 2 === 0 ? 2 : 0]] : tones;
+        for (const pitch of pitches) out.push({ pitch, beat: bi * beatsPerBar + ch.beat + offset, dur: Math.min(duration, ch.len - offset) });
+        offset += duration;
       }
+    }
+  });
+  return out;
+}
+
+/** Automatic bass support without doubling the piano part the player performs. */
+export function bassLine(progression: string, beatsPerBar = 4): NoteDef[] {
+  const out: NoteDef[] = [];
+  bars(progression).forEach((bar, bi) => {
+    for (const ch of chordsInBar(bar, beatsPerBar)) {
+      if (ch.name === 'R') continue;
+      const chord = CHORDS[ch.name];
+      if (!chord) throw new Error(`Unknown chord ${ch.name}`);
+      out.push({ pitch: chord.bass, beat: bi * beatsPerBar + ch.beat, dur: ch.len });
     }
   });
   return out;

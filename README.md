@@ -13,7 +13,7 @@ Coloured notes fall onto a piano keyboard; you play them on your computer keyboa
 | Mode | What it is |
 |---|---|
 | **Learn** | 6 worlds, 25 lessons: after three warm-ups, every lesson is a real song you already know (Hot Cross Buns, Ode to Joy, Twinkle Twinkle, Amazing Grace, Greensleeves, Für Elise, Jingle Bells, The Entertainer…). Tempos start a little below natural speed and rise world by world, and every lesson has a "practice slower (75%)" option. Each lesson opens with a short, interactive explanation ("press the glowing keys") and then you play right away. Stars and completion are tracked, and every lesson stays open. |
-| **Arcade** | 23 songs and exercises, including simplified pop excerpts by Keane, Robbie Williams, Coldplay and Adele, labelled Easy → Expert, with accompaniment, for scores, combos and S ranks. Hard mode plays them 25 % faster. |
+| **Arcade** | 48 songs and exercises, including 30 simplified pop excerpts and accompaniments by Keane, Robbie Williams, Coldplay, Adele, Alicia Keys, Elton John and more, labelled Easy → Expert, with accompaniment, for scores, combos and S ranks. Hard mode plays them 25 % faster. |
 | **Free Play** | A virtual piano with rising note trails and a sustain pedal (hold Space). |
 
 ## Controls
@@ -67,7 +67,7 @@ src/
     layout.ts      piano key geometry (the keys are the lanes)
     renderer.ts    Canvas highway, falling notes, piano, staff strip, effects
     session.ts     one play-through: timeline, scheduler, judge wiring, render loop
-  data/            lessons (25), arcade songs (23), accompaniment helpers
+  data/            lessons (25), arcade songs (48), accompaniment helpers
   ui/              screens (home, learn, lesson intro, game, arcade, free play, settings), dialogs
   i18n.ts          English / Spanish strings
   config.ts        optional ad slot (disabled by default)
@@ -99,7 +99,7 @@ Each song has a title, BPM, time signature, difficulty, an educational objective
 
 The catalog includes original Pianito exercises, simplified arrangements of public-domain works (traditional tunes, Beethoven, Petzold, Pierpont), and short arrangements of copyrighted pop songs. Pop song credits identify the artists and songwriters; these compositions remain the property of their respective rights holders. There are no recordings or audio samples. Every sound is synthesized at runtime.
 
-The pop arrangements are transposed to fit the computer keyboard. The player performs a simplified piano accompaniment while an automatic wordless voice carries the vocal line. Keane uses quarter-note chord pulses (a reduction of the faster original pulse), Angels uses half-note chord pulses, The Scientist uses repeated quarter-note chords, and Adele uses eighth-note broken chords (a reduction of the faster original arpeggios). These are short practice reductions, not full piano transcriptions. Clocks retains its instrumental piano intro, with sustained bass/chord backing and no vocal guide. Vocal pitch and piano references:
+The pop arrangements are transposed to fit the computer keyboard. The player performs a simplified piano accompaniment or instrumental hook. Excerpts with a vocal guide play the wordless melody automatically; instrumental accompaniment excerpts have bass support instead. Keane uses quarter-note chord pulses (a reduction of the faster original pulse), Angels uses half-note chord pulses, The Scientist uses repeated quarter-note chords, and Adele uses eighth-note broken chords (a reduction of the faster original arpeggios). These are short practice reductions, not full piano transcriptions. Clocks retains its instrumental piano intro, with sustained bass/chord backing and no vocal guide. References for the first five additions:
 
 - Keane, **Somewhere Only We Know** — verse and chorus, transposed from A to C ([note reference](https://noobnotes.net/somewhere-only-we-know-keane/)).
 - Robbie Williams, **Angels** — opening verse and chorus excerpt in C ([note reference](https://noobnotes.net/angels-robbie-williams/)).
@@ -108,6 +108,40 @@ The pop arrangements are transposed to fit the computer keyboard. The player per
 - Adele, **Someone Like You** — chorus excerpt, transposed from A to C ([note reference](https://noobnotes.net/someone-like-you-adele/)).
 
 The Adele piano reduction follows the broken-chord approach described in [Pianote's piano tutorial](https://www.pianote.com/blog/someone-like-you-piano-tutorial/).
+
+### More pop arrangements
+
+The following 25 additions are short, simplified piano arrangements, usually 8–16 bars. Accompaniments retain the referenced harmony with reduced rhythms and voicings; they are not full transcriptions. Guitar or string parts are explicitly labelled as piano adaptations. Vocal guides are included for Fix You, Hello, Your Song, Let It Be, A Thousand Years, All of Me, Perfect, How to Save a Life, and Don't Look Back in Anger. Other entries are instrumental accompaniment practice, without a vocal track.
+
+| Song / artist | Arrangement | Reference |
+|---|---|---|
+| Everybody's Changing — Keane | C; repeated chords with Cmaj7 changes | [Chord chart](https://ukutabs.com/k/keane/everybodys-changing/) |
+| Feel — Robbie Williams | D minor; broken chords over the verse's D pedal, then chorus harmony | [Chord chart](https://www.bellandcomusic.com/feel.html) |
+| She's the One — Robbie Williams / Karl Wallinger | Transposed to C; half-note chord reduction | [Piano accompaniment lesson](https://www.youtube.com/watch?v=BBQdA_PBkDM) |
+| Fix You — Coldplay | Chorus in C; sustained chords, suspended resolution and vocal guide | [Pianote lesson](https://www.pianote.com/blog/how-to-play-fix-you-coldplay-piano/) |
+| Yellow — Coldplay | Verse harmony in C; guitar chords adapted to piano | [Piano lesson](https://www.supersimplepiano.com/how-to-play/yellow-842721439354641468) |
+| Paradise — Coldplay | Transposed to A minor; chord pulse reduction | [Chord chart](https://www.cifraclub.com/coldplay/paradise/) |
+| Viva la Vida — Coldplay | Transposed to C; simplified syncopated string groove on piano | [Piano lesson](https://www.supersimplepiano.com/how-to-play/viva-la-vida-272536865603631784) |
+| Trouble — Coldplay | G; broken-chord accompaniment reduction | [Piano accompaniment lesson](https://www.youtube.com/watch?v=wRDi_LDzkyQ) |
+| Hello — Adele | Chorus excerpt in A minor; half-note chords and vocal guide | [Vocal pitches](https://noobnotes.net/hello-adele/) |
+| Easy on Me — Adele | Transposed to C; simplified seventh/suspended chords and syncopation | [Pianote lesson](https://www.pianote.com/blog/easy-on-me/) |
+| Your Song — Elton John | Verse excerpt in C; broken chords and vocal guide | [Piano lesson](https://www.pianowithnate.com/All-Songs/your-song), [vocal pitches](https://noobnotes.net/your-song-elton-john/) |
+| Let It Be — The Beatles | Original C; verse chord pulse and vocal guide | [Pianote lesson](https://www.pianote.com/blog/how-to-play-let-it-be-piano/), [vocal pitches](https://noobnotes.net/let-it-be-the-beatles/) |
+| A Thousand Miles — Vanessa Carlton | Chorus piano rhythm in C; three short F chords, three Am chords, then G | [Piano lesson](https://pianolessons.com/piano-lessons/1000-miles-vanessa-carlton.php) |
+| A Thousand Years — Christina Perri | Verse in G; slow 6/8 broken chords and vocal guide | [Piano lesson](https://www.piano-play-it.com/a-thousand-years-christina-perri.html), [vocal pitches](https://noobnotes.net/a-thousand-years-christina-perri/) |
+| All of Me — John Legend | Verse in E minor; repeated chord reduction and vocal guide | [Piano accompaniment lesson](https://www.play-by-ear.net/all-of-me-piano-chords/), [vocal pitches](https://noobnotes.net/all-of-me-john-legend/) |
+| When I Was Your Man — Bruno Mars | C; chorus chord reduction, including the major-to-minor IV change | [Chord and note chart](https://www.chords-and-tabs.net/song/name/bruno-mars-when-i-was-your-man-5) |
+| Perfect — Ed Sheeran | Verse in C; slow 12/8 broken-chord piano adaptation and vocal guide | [Piano lesson](https://www.supersimplepiano.com/how-to-play/perfect-698647457720472500), [vocal pitches](https://noobnotes.net/perfect-ed-sheeran/) |
+| Someone You Loved — Lewis Capaldi | Transposed to C; alternating upper/lower chord tones over bass | [Piano accompaniment lesson](https://www.play-by-ear.net/someone-you-loved-piano-chords/) |
+| If I Ain't Got You — Alicia Keys | Intro reduction in G; descending broken seventh chords, slow 6/8 | [Piano lesson](https://www.youtube.com/watch?v=Bm4P_9xvfSU) |
+| Apologize — OneRepublic | Transposed to A minor; broken-chord accompaniment reduction | [Piano accompaniment lesson](https://www.youtube.com/watch?v=fj_ffb-qoQI) |
+| How to Save a Life — The Fray | Verse excerpt in C; broken chords and vocal guide | [Piano lesson](https://www.onlinepianist.com/piano-songs/the-fray/how-to-save-a-life), [vocal pitches](https://noobnotes.net/how-to-save-a-life-the-fray/) |
+| Chasing Cars — Snow Patrol | Transposed to C; picked guitar figure adapted to piano over moving bass | [Picking/chord reference](https://www.bellandcomusic.com/chasing-cars.html) |
+| No Surprises — Radiohead | Instrumental hook in C; guitar figure adapted to piano | [Instrumental tab](https://www.gotabs.com/radiohead/no-surprises-tab) |
+| What Was I Made For? — Billie Eilish | C; spacious chord accompaniment with split bars | [Chord chart](https://www.chordband.com/chords/billie-eilish-what-was-i-made-for) |
+| Don't Look Back in Anger — Oasis | Verse in C; chord pulse and vocal guide | [Chord chart](https://chordna.com/song/oasis_don_t_look_back_in_anger), [vocal pitches](https://noobnotes.net/dont-look-back-in-anger-oasis/) |
+
+In the 6/8 and 12/8 practice charts, BPM and notation durations count eighth-note units. Their slower practice tempos keep the compound feel while remaining playable. `pianoPart(progression, pattern, beatsPerBar)` supports these meters, and `bassLine(progression, beatsPerBar)` adds automatic bass without doubling the player's chords. Additional chord shapes include Cmaj7, Fmaj7, Am7, Em7, C7, Gsus4, Csus2, Fsus2, Dsus2, Gm, Bb and Eb.
 
 ## Advertising (disabled)
 
