@@ -1,6 +1,6 @@
 // Unified note input: computer keyboard (default), touch/pointer, and optional Web MIDI.
 // Every source emits the same NoteEvent so all game modes share one input path.
-import { KEY_TO_MIDI } from '../core/keymap';
+import { midiForCode } from '../core/keymap';
 
 export interface NoteEvent {
   pitch: number;
@@ -82,7 +82,7 @@ export class InputManager {
   }
 
   private onKeyDown = (e: KeyboardEvent): void => {
-    const pitch = KEY_TO_MIDI[e.code];
+    const pitch = midiForCode(e.code);
     if (pitch === undefined || e.ctrlKey || e.metaKey || e.altKey || this.isTyping(e.target)) return;
     e.preventDefault();
     if (e.repeat) return; // auto-repeat is not a new keystroke

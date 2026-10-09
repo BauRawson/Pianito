@@ -3,7 +3,8 @@ import type { App, Screen } from './app';
 import { h, svgIcon, ICONS } from './dom';
 import { t } from '../i18n';
 import { Renderer } from '../game/renderer';
-import { KEYBOARD_RANGE } from '../core/keymap';
+import { currentKeyMap, shiftOctave } from '../core/keymap';
+import { cAtOrBelow } from '../core/music';
 import { noteName } from '../core/music';
 import type { Voice } from '../audio/engine';
 import { showKeysHelp } from './dialogs';
@@ -60,6 +61,7 @@ export function freePlayScreen(app: App): Screen {
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Space') { e.preventDefault(); if (!e.repeat) setSustain(true); }
     if (e.key === 'Escape') app.go({ name: 'home' });
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); app.input.releaseAll(); shiftOctave(e.key === 'ArrowLeft' ? -1 : 1); }
   };
   const onKeyUp = (e: KeyboardEvent) => { if (e.code === 'Space') setSustain(false); };
 
@@ -68,7 +70,7 @@ export function freePlayScreen(app: App): Screen {
     const s = app.settings.get();
     renderer.draw({
       time: 0, lookahead: 2, notes: null, states: null,
-      lo: KEYBOARD_RANGE.lo, hi: KEYBOARD_RANGE.hi,
+      lo: Math.max(36, cAtOrBelow(currentKeyMap().lo) - 12), hi: Math.min(96, currentKeyMap().hi + 7),
       pressed: app.input.pressed(), beatDur: 0, beatsPerBar: 4, beatStart: 0,
       labels: app.touchOnly ? 'notes' : s.labels, naming: app.settings.naming(), staff: false,
     }, performance.now());

@@ -1,26 +1,79 @@
-// Computer-keyboard → piano mapping, modelled on common virtual-piano software.
-// Uses KeyboardEvent.code (physical key position), so the layout stays musically
-// identical across QWERTY/QWERTZ/AZERTY; labels adapt to the user's layout when the
-// browser exposes it (navigator.keyboard.getLayoutMap).
+// Computer-keyboard → piano mapping, modelled on virtual-piano software, using only two rows:
 //
-//   Home row  A S D F G H J K L ; '   → white keys C4 D4 E4 F4 G4 A4 B4 C5 D5 E5 F5
-//   Top row    W E   T Y U   O P      → black keys C♯4 D♯4 F♯4 G♯4 A♯4 C♯5 D♯5
-//   Bottom row Z X C V B N M          → lower octave white keys C3 … B3
+//   Top row    W E R T Y U I O P [      → black keys (only where a black key exists)
+//   Home row  A S D F G H J K L ; '     → 11 consecutive white keys
+//
+// The home row is a sliding window: by default A = middle C (C4 … F5), but each song shifts
+// it so that every note it needs fits on these two rows (e.g. a song in G3–E4 starts at A = G3).
+// Uses KeyboardEvent.code (physical position), so the shape is identical on QWERTY, QWERTZ,
+// AZERTY and Spanish layouts (where ; ' print as Ñ ´); labels follow the user's layout when
+// the browser exposes it.
+import { isBlack, whiteAtOrAbove } from './music';
 
-export const KEY_TO_MIDI: Readonly<Record<string, number>> = Object.freeze({
-  KeyZ: 48, KeyX: 50, KeyC: 52, KeyV: 53, KeyB: 55, KeyN: 57, KeyM: 59,
-  KeyA: 60, KeyW: 61, KeyS: 62, KeyE: 63, KeyD: 64, KeyF: 65, KeyT: 66,
-  KeyG: 67, KeyY: 68, KeyH: 69, KeyU: 70, KeyJ: 71, KeyK: 72, KeyO: 73,
-  KeyL: 74, KeyP: 75, Semicolon: 76, Quote: 77,
-});
+export const HOME_ROW = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote'] as const;
+/** Fallback only, for the rare song wider than the two rows: an octave below the home row. */
+export const BOTTOM_ROW = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'] as const;
+/** TOP_ROW[i] sits between HOME_ROW[i] and HOME_ROW[i + 1]. */
+export const TOP_ROW = ['KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft'] as const;
 
-export const MIDI_TO_KEY: Readonly<Record<number, string>> = Object.freeze(
-  Object.fromEntries(Object.entries(KEY_TO_MIDI).map(([code, midi]) => [midi, code])),
-);
+export const DEFAULT_BASE = 60; // A = middle C
 
-export const KEYBOARD_RANGE = { lo: 48, hi: 77 } as const;
+export interface KeyMap {
+  base: number;
+  lo: number;
+  hi: number;
+  keyToMidi: Readonly<Record<string, number>>;
+  midiToKey: Readonly<Record<number, string>>;
+}
 
-const FALLBACK_LABELS: Record<string, string> = { Semicolon: ';', Quote: "'" };
+/** Builds the mapping whose home row starts on white key `base`. */
+export function keyMapFor(base: number, lowRow = false): KeyMap {
+  if (isBlack(base)) throw new Error('Keyboard base must be a white key');
+  const whites: number[] = [];
+  for (let m = base; whites.length < HOME_ROW.length; m++) if (!isBlack(m)) whites.push(m);
+  const keyToMidi: Record<string, number> = {};
+  HOME_ROW.forEach((code, i) => { keyToMidi[code] = whites[i]; });
+  TOP_ROW.forEach((code, i) => { if (whites[i + 1] - whites[i] === 2) keyToMidi[code] = whites[i] + 1; });
+  if (lowRow) BOTTOM_ROW.forEach((code, i) => { keyToMidi[code] = whites[i] - 12; });
+  const midiToKey = Object.fromEntries(Object.entries(keyToMidi).map(([c, m]) => [m, c]));
+  return { base, lo: lowRow ? whites[0] - 12 : whites[0], hi: whites[whites.length - 1], keyToMidi, midiToKey };
+}
+
+/**
+ * The window that can play every pitch: prefers the default (A = C4), then a C-based
+ * window, then the one closest to middle C. Only if no two-row window fits does it add the
+ * bottom row (Z…M = the octave below A…J). Returns null if nothing fits.
+ */
+export function fitKeyboard(pitches: number[]): KeyMap | null {
+  if (!pitches.length) return keyMapFor(DEFAULT_BASE);
+  const fits = (k: KeyMap) => pitches.every((p) => k.midiToKey[p] !== undefined);
+  const lo = Math.min(...pitches);
+  const pick = (low: boolean): KeyMap | null => {
+    const def = keyMapFor(DEFAULT_BASE, low);
+    if (fits(def)) return def;
+    const candidates: KeyMap[] = [];
+    for (let b = whiteAtOrAbove(lo - 18); b <= lo + 12; b++) if (!isBlack(b)) candidates.push(keyMapFor(b, low));
+    const ok = candidates.filter(fits);
+    ok.sort((a, b) => Number(b.base % 12 === 0) - Number(a.base % 12 === 0) || Math.abs(a.base - 60) - Math.abs(b.base - 60));
+    return ok[0] ?? null;
+  };
+  return pick(false) ?? pick(true);
+}
+
+let current: KeyMap = keyMapFor(DEFAULT_BASE);
+
+export const currentKeyMap = (): KeyMap => current;
+export function setKeyMap(k: KeyMap): void { current = k; }
+export function resetKeyMap(): void { current = keyMapFor(DEFAULT_BASE); }
+/** Shift the window by whole octaves (Free Play). */
+export function shiftOctave(dir: 1 | -1): void {
+  const b = current.base + dir * 12;
+  if (b >= 36 && b <= 84) current = keyMapFor(b);
+}
+
+export const midiForCode = (code: string): number | undefined => current.keyToMidi[code];
+
+const FALLBACK_LABELS: Record<string, string> = { Semicolon: ';', Quote: "'", BracketLeft: '[' };
 let layoutLabels: Map<string, string> | null = null;
 
 export function keyLabel(code: string): string {
@@ -30,7 +83,7 @@ export function keyLabel(code: string): string {
 }
 
 export function labelForMidi(m: number): string | undefined {
-  const code = MIDI_TO_KEY[m];
+  const code = current.midiToKey[m];
   return code ? keyLabel(code) : undefined;
 }
 

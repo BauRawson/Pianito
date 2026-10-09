@@ -9,7 +9,7 @@ import { gradeFor } from '../core/progress';
 import { miniPiano } from './piano';
 import { showKeysHelp, showPianoGuide, showTutorial } from './dialogs';
 import { rangeFor } from '../game/layout';
-import { labelForMidi } from '../core/keymap';
+import { labelForMidi, fitKeyboard, setKeyMap, DEFAULT_BASE, keyLabel, HOME_ROW } from '../core/keymap';
 import { noteColor, noteName } from '../core/music';
 
 const PRACTICE_RATE = 0.75;
@@ -150,6 +150,8 @@ export function lessonScreen(app: App, route: Route): Screen {
   const world = WORLDS.find((w) => w.id === lesson.world)!;
   const idx = LESSON_IDS.indexOf(lesson.id);
   const naming = app.settings.naming();
+  const keys = fitKeyboard(lesson.notes.map((n) => n.pitch));
+  if (keys) setKeyMap(keys);
   const { lo, hi } = rangeFor(lesson.notes.map((n) => n.pitch));
   const found = new Set<number>();
   const piano = miniPiano(lo, hi, { naming, highlight: lesson.focus, onPress: (m, on) => app.input.touch('intro', on ? m : null, performance.now()) });
@@ -180,6 +182,7 @@ export function lessonScreen(app: App, route: Route): Screen {
       h('h1', null, tl(lesson.title)),
       h('p', { class: 'objective' }, tl(lesson.objective)),
       h('div', { class: 'intro-text' }, tla(lesson.intro).map((p) => h('p', null, p))),
+      keys && keys.base !== DEFAULT_BASE ? h('p', { class: 'shift-banner' }, t('keysShiftedLong', { key: keyLabel(HOME_ROW[0]), note: noteName(keys.base, naming), c: labelForMidi(60) ?? '?' })) : null,
       chips,
       piano.el,
       status,

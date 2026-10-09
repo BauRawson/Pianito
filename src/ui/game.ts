@@ -4,6 +4,8 @@ import { h, svgIcon, ICONS, stars, fmtScore, pct } from './dom';
 import { t, tl } from '../i18n';
 import { lessonById, LESSON_IDS } from '../data/lessons';
 import { arcadeById } from '../data/arcade';
+import { fitKeyboard, setKeyMap, DEFAULT_BASE, keyLabel, HOME_ROW } from '../core/keymap';
+import { noteName } from '../core/music';
 import type { Lesson, Song } from '../data/types';
 import { GameSession, type SessionResult } from '../game/session';
 import { gradeFor, isPassing } from '../core/progress';
@@ -17,6 +19,8 @@ export function gameScreen(app: App, route: Route): Screen {
   const rate = route.rate ?? (route.mode === 'arcade' && route.hard ? 1.25 : 1);
   const recordKey = route.mode === 'arcade' && route.hard ? `${song.id}:hard` : song.id;
   const s = app.settings.get();
+  const keys = fitKeyboard([...song.notes.map((n) => n.pitch)]);
+  if (keys) setKeyMap(keys);
   const staff = !app.touchOnly && (s.sheetMusic === 'on' || (s.sheetMusic === 'auto' && !!lesson?.staff));
 
   const scoreEl = h('span', { class: 'hud-val' }, '0');
@@ -30,7 +34,7 @@ export function gameScreen(app: App, route: Route): Screen {
   const el = h('main', { class: 'game' },
     h('div', { class: 'hud' },
       pauseBtn,
-      h('div', { class: 'hud-title' }, h('strong', null, tl(song.title)), h('span', null, lesson ? `${tl(lesson.objective)} · ${Math.round(song.bpm * rate)} BPM` : `${Math.round(song.bpm * rate)} BPM`)),
+      h('div', { class: 'hud-title' }, h('strong', null, tl(song.title)), keys && keys.base !== DEFAULT_BASE ? h('span', { class: 'shift-note' }, t('keysShifted', { key: keyLabel(HOME_ROW[0]), note: noteName(keys.base, app.settings.naming()) })) : null, h('span', null, lesson ? `${tl(lesson.objective)} · ${Math.round(song.bpm * rate)} BPM` : `${Math.round(song.bpm * rate)} BPM`)),
       h('div', { class: 'hud-stats' },
         h('div', { class: 'hud-stat' }, h('span', { class: 'hud-label' }, t('score')), scoreEl),
         h('div', { class: 'hud-stat' }, h('span', { class: 'hud-label' }, t('combo')), comboEl),

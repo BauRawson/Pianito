@@ -159,8 +159,8 @@ export const LESSONS: Lesson[] = [
     title: { en: 'Amazing Grace', es: 'Sublime gracia' },
     objective: { en: 'Feel 3/4 time and hold long notes.', es: 'Siente el compás de 3/4 y mantén notas largas.' },
     intro: {
-      en: ['This hymn is in 3/4: three beats per bar — strong, weak, weak. Count "1, 2, 3".', 'It starts low on G and A (keys B and N on the bottom row: the lower octave). Hold every long note to its end.'],
-      es: ['Este himno está en 3/4: tres pulsos por compás, fuerte-débil-débil. Cuenta "1, 2, 3".', 'Empieza grave en Sol y La (teclas B y N de la fila inferior: la octava grave). Mantén cada nota larga hasta el final.'],
+      en: ['This hymn is in 3/4: three beats per bar — strong, weak, weak. Count "1, 2, 3".', 'It starts low on G and A — below middle C, so your keyboard slides down for this song. Hold every long note to its end.'],
+      es: ['Este himno está en 3/4: tres pulsos por compás, fuerte-débil-débil. Cuenta "1, 2, 3".', 'Empieza grave en Sol y La — por debajo del Do central, así que tu teclado se desplaza en esta canción. Mantén cada nota larga hasta el final.'],
     },
     focus: [55, 57, 60],
     notes: parseSeq('R:2 G3 | C4:2 E4:.5 C4:.5 | E4:2 D4 | C4:2 A3 | G3:2 G3 | C4:2 E4:.5 C4:.5 | E4:2 D4 | G4:3 | G4:2 E4 | G4:2 E4:.5 C4:.5 | E4:2 D4 | C4:2 A3 | G3:2 G3 | C4:2 E4:.5 C4:.5 | E4:2 D4 | C4:3'),
@@ -183,8 +183,8 @@ export const LESSONS: Lesson[] = [
     title: { en: 'Frère Jacques', es: 'Martinillo (Frère Jacques)' },
     objective: { en: 'Eighth notes: two notes per beat.', es: 'Corcheas: dos notas por pulso.' },
     intro: {
-      en: ['An eighth note lasts half a beat — two fit in each click. Count "1-and, 2-and".', '"Morning bells are ringing" is four quick eighths. The low G at the end is key B on the bottom row.'],
-      es: ['Una corchea dura medio pulso: caben dos en cada clic. Cuenta "1-y, 2-y".', '"Suenan las campanas" son cuatro corcheas rápidas. El Sol grave del final es la tecla B de la fila inferior.'],
+      en: ['An eighth note lasts half a beat — two fit in each click. Count "1-and, 2-and".', '"Morning bells are ringing" is four quick eighths. It ends on a low G, below middle C — the keyboard slides down to reach it.'],
+      es: ['Una corchea dura medio pulso: caben dos en cada clic. Cuenta "1-y, 2-y".', '"Suenan las campanas" son cuatro corcheas rápidas. Termina en un Sol grave, por debajo del Do central: el teclado se desplaza para alcanzarlo.'],
     },
     focus: [67, 69, 55],
     notes: parseSeq(FRERE),
@@ -306,8 +306,8 @@ export const LESSONS: Lesson[] = [
     title: { en: 'Yankee Doodle', es: 'Yankee Doodle' },
     objective: { en: 'Use the whole lower octave at speed.', es: 'Usa toda la octava grave con velocidad.' },
     intro: {
-      en: ['The chorus dives below middle C. The bottom row Z X C V B N M plays C3 to B3.', 'Watch the labels, not your hands — the letters tell you which row to use.'],
-      es: ['El estribillo baja del Do central. La fila inferior Z X C V B N M toca de Do3 a Si3.', 'Mira las etiquetas, no tus manos: las letras te dicen qué fila usar.'],
+      en: ['The chorus dives well below middle C, so for this song your home row slides a whole range lower.', 'Watch the labels, not your hands — the letters always tell you what to press.'],
+      es: ['El estribillo baja mucho del Do central, así que en esta canción tu fila central se desplaza hacia abajo.', 'Mira las etiquetas, no tus manos: las letras siempre te dicen qué pulsar.'],
     },
     focus: [59, 57, 55, 53, 52],
     notes: parseSeq('C4 C4 D4 E4 | C4 E4 D4 G3 | C4 C4 D4 E4 | C4:2 B3:2 | C4 C4 D4 E4 | F4 E4 D4 C4 | B3 G3 A3 B3 | C4:2 C4:2 | A3 B3 A3 G3 | A3 B3 C4:2 | G3 A3 G3 F3 | E3:2 G3:2 | A3 B3 A3 G3 | A3 B3 C4 A3 | G3 C4 B3 D4 | C4:2 C4:2'),

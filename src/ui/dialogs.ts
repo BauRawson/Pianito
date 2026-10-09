@@ -3,7 +3,7 @@ import type { App } from './app';
 import { h, modal } from './dom';
 import { miniPiano } from './piano';
 import { t } from '../i18n';
-import { KEY_TO_MIDI, keyLabel } from '../core/keymap';
+import { HOME_ROW, TOP_ROW, BOTTOM_ROW, currentKeyMap, keyLabel } from '../core/keymap';
 import { isBlack, noteColor, noteName } from '../core/music';
 
 export function showTutorial(app: App, onDone: () => void): void {
@@ -58,14 +58,15 @@ export function showTutorial(app: App, onDone: () => void): void {
 }
 
 export function showKeysHelp(): void {
+  const map = currentKeyMap();
   const rows: string[][] = [
-    ['KeyW', 'KeyE', '', 'KeyT', 'KeyY', 'KeyU', '', 'KeyO', 'KeyP'],
-    ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote'],
-    ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM'],
+    TOP_ROW.map((c) => (map.keyToMidi[c] !== undefined ? c : '')),
+    [...HOME_ROW],
+    map.keyToMidi[BOTTOM_ROW[0]] !== undefined ? [...BOTTOM_ROW] : [],
   ];
   const cap = (code: string) => {
     if (!code) return h('span', { class: 'kcap gap' });
-    const m = KEY_TO_MIDI[code];
+    const m = map.keyToMidi[code];
     return h('span', { class: `kcap${isBlack(m) ? ' black' : ''}`, style: `--c:${noteColor(m)}` },
       h('b', null, keyLabel(code)), h('small', null, noteName(m, 'letter')));
   };
@@ -76,7 +77,7 @@ export function showKeysHelp(): void {
     h('div', { class: 'kb' },
       h('div', { class: 'kb-row r0' }, rows[0].map(cap)),
       h('div', { class: 'kb-row r1' }, rows[1].map(cap)),
-      h('div', { class: 'kb-row r2' }, rows[2].map(cap)),
+      rows[2].length ? h('div', { class: 'kb-row r2' }, rows[2].map(cap)) : null,
     ),
     h('p', { class: 'muted small' }, t('ghosting')),
     h('div', { class: 'row end' }, ok),

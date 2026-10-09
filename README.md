@@ -19,10 +19,11 @@ Coloured notes fall onto a piano keyboard; you play them on your computer keyboa
 ## Controls
 
 ```
- W E   T Y U   O P          ← black keys  C♯4 D♯4 · F♯4 G♯4 A♯4 · C♯5 D♯5
-A S D F G H J K L ; '       ← white keys  C4 D4 E4 F4 G4 A4 B4 C5 D5 E5 F5
- Z X C V B N M              ← lower octave C3 … B3 (white keys)
+ W E   T Y U   O P          ← black keys (above the white keys they sit between)
+A S D F G H J K L ; '       ← 11 white keys — by default C4 … F5 (A = middle C)
 ```
+
+Every song is playable on just these two rows: when a song sits lower or higher, the window **slides** (e.g. A = G3) and the falling notes show which letters to press. Only Pachelbel's Canon, which is one note too wide, also uses one key of the bottom row. In Free Play, ← → shift the window by an octave.
 
 The mapping uses physical key positions (`KeyboardEvent.code`), so it works the same on QWERTY, QWERTZ and AZERTY. Where the browser supports it, labels show your layout's printed characters. Other input options:
 

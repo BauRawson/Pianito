@@ -4,7 +4,7 @@ import { LESSONS, WORLDS } from '../src/data/lessons';
 import { ARCADE } from '../src/data/arcade';
 import { buildChart } from '../src/core/chart';
 import { Judge } from '../src/core/judge';
-import { KEYBOARD_RANGE, MIDI_TO_KEY } from '../src/core/keymap';
+import { fitKeyboard } from '../src/core/keymap';
 import { isBlack } from '../src/core/music';
 
 const ALL = [...LESSONS, ...ARCADE];
@@ -34,16 +34,20 @@ describe('content', () => {
           const l = s as (typeof LESSONS)[number];
           expect(l.intro.en.length).toBeGreaterThan(0);
           expect(l.intro.es.length).toBe(l.intro.en.length);
-          for (const f of l.focus) expect(MIDI_TO_KEY[f]).toBeDefined();
+          const keys = fitKeyboard(l.notes.map((n) => n.pitch))!;
+          for (const f of l.focus) expect(keys.midiToKey[f]).toBeDefined();
         }
       });
 
       it('only uses notes playable on the computer keyboard', () => {
         expect(s.notes.length).toBeGreaterThan(8);
+        const keys = fitKeyboard(s.notes.map((n) => n.pitch));
+        expect(keys).not.toBeNull();
+        if (!keys) return;
+        // Only Pachelbel's Canon is allowed to need the bottom row.
+        if (keys.keyToMidi.KeyZ !== undefined) expect(s.id).toBe('arc-canon');
         for (const n of s.notes) {
-          expect(n.pitch).toBeGreaterThanOrEqual(KEYBOARD_RANGE.lo);
-          expect(n.pitch).toBeLessThanOrEqual(KEYBOARD_RANGE.hi);
-          expect(MIDI_TO_KEY[n.pitch]).toBeDefined();
+          expect(keys.midiToKey[n.pitch]).toBeDefined();
         }
       });
 

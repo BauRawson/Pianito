@@ -450,3 +450,5 @@ input, select, textarea { -webkit-user-select: auto; user-select: auto; }
 .diff-badge.d1 { --dc: #2bb673; } .diff-badge.d2 { --dc: #22a3c3; } .diff-badge.d3 { --dc: #f0a500; } .diff-badge.d4 { --dc: #ff6b3d; } .diff-badge.d5 { --dc: #d6336c; }
 .card-foot { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
 
+.shift-banner { background: #fff3cc; border-radius: 12px; padding: 10px 14px; font-weight: 700; font-size: .95rem; }
+.shift-note { font-size: .75rem; font-weight: 800; color: var(--sun); }

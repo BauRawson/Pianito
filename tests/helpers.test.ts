@@ -1,17 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { bassLine, pianoPart } from '../src/data/helpers';
-import { MIDI_TO_KEY } from '../src/core/keymap';
+import { fitKeyboard } from '../src/core/keymap';
 
 describe('pop piano reductions', () => {
   it.each([4, 6, 12])('keeps split chords, rests and bass aligned in a %i-unit bar', (meter) => {
     const progression = 'C,G R F,Am Cmaj7';
     const notes = pianoPart(progression, 'arpeggio', meter);
     const bass = bassLine(progression, meter);
+    const keys = fitKeyboard(notes.map((n) => n.pitch));
+    expect(keys).not.toBeNull();
+    expect(keys!.keyToMidi.KeyZ).toBeUndefined(); // fits on the two main rows
     expect(Math.max(...notes.map((n) => n.beat + n.dur))).toBe(meter * 4);
     expect(Math.max(...bass.map((n) => n.beat + n.dur))).toBe(meter * 4);
     expect(bass.map((n) => n.beat)).toEqual([0, meter / 2, meter * 2, meter * 2.5, meter * 3]);
     for (const n of notes) {
-      expect(MIDI_TO_KEY[n.pitch]).toBeDefined();
+      expect(keys!.midiToKey[n.pitch]).toBeDefined();
       expect(n.dur).toBeGreaterThan(0);
       expect(n.beat < meter || n.beat >= meter * 2).toBe(true);
       // Neither a bar boundary nor a mid-bar chord change may bisect a note.

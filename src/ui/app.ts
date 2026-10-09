@@ -3,7 +3,7 @@ import { AudioEngine, type Voice } from '../audio/engine';
 import { InputManager } from '../input/input';
 import { SettingsStore, type Settings } from '../core/settings';
 import { Progress, safeStorage } from '../core/progress';
-import { loadLayoutLabels } from '../core/keymap';
+import { loadLayoutLabels, resetKeyMap } from '../core/keymap';
 import { setLang, t } from '../i18n';
 import { h, svgIcon, ICONS } from './dom';
 import { renderAdSlot } from '../config';
@@ -119,6 +119,7 @@ export function createApp(root: HTMLElement, screens: Record<Route['name'], Scre
   const render = () => {
     current?.destroy?.();
     input.releaseAll();
+    resetKeyMap();
     const screen = screens[route.name](app, route);
     current = screen;
     root.replaceChildren();

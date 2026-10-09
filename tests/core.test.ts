@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { parsePitch, noteName, isBlack, staffPosition } from '../src/core/music';
-import { KEY_TO_MIDI, MIDI_TO_KEY, KEYBOARD_RANGE } from '../src/core/keymap';
+import { keyMapFor, fitKeyboard, DEFAULT_BASE } from '../src/core/keymap';
+const KEY_TO_MIDI = keyMapFor(DEFAULT_BASE).keyToMidi;
+const MIDI_TO_KEY = keyMapFor(DEFAULT_BASE).midiToKey;
+const KEYBOARD_RANGE = { lo: 60, hi: 77 };
 import { parseSeq, seqBeats, buildChart, groupChords, HOLD_MIN_BEATS } from '../src/core/chart';
 import { Judge, DEFAULT_WINDOWS } from '../src/core/judge';
 import { Progress, starsFor, gradeFor, type KV } from '../src/core/progress';
@@ -52,6 +55,33 @@ describe('keyboard mapping', () => {
       expect(p).toBeGreaterThanOrEqual(KEYBOARD_RANGE.lo);
       expect(p).toBeLessThanOrEqual(KEYBOARD_RANGE.hi);
     }
+  });
+});
+
+describe('sliding keyboard window', () => {
+  it('uses two rows only by default (no bottom row)', () => {
+    expect(KEY_TO_MIDI.KeyZ).toBeUndefined();
+    expect(KEY_TO_MIDI.KeyR).toBeUndefined(); // no black key between E and F
+    expect(KEY_TO_MIDI.KeyI).toBeUndefined(); // nor between B and C
+  });
+  it('keeps the default window when the song fits it', () => {
+    expect(fitKeyboard([60, 64, 67, 77])!.base).toBe(60);
+  });
+  it('slides down for low songs, with black keys still above their white neighbours', () => {
+    const k = fitKeyboard([55, 57, 60, 67])!; // G3..G4
+    expect(k.base).toBe(55);
+    expect(k.keyToMidi.KeyA).toBe(55);
+    expect(k.keyToMidi.KeyW).toBe(56); // G♯3 between G3 and A3
+    expect(k.keyToMidi.KeyE).toBe(58); // A♯3
+    expect(k.keyToMidi.KeyR).toBeUndefined(); // B3–C4: no black key
+    expect(k.keyToMidi.KeyD).toBe(59);
+    expect(k.keyToMidi.KeyF).toBe(60);
+    expect(k.keyToMidi.KeyZ).toBeUndefined();
+  });
+  it('adds the bottom row only when two rows cannot fit the song', () => {
+    const k = fitKeyboard([57, 60, 76])!; // A3..E5 (12 white keys)
+    expect(k.keyToMidi.KeyN).toBe(57);
+    expect(k.keyToMidi.KeyA).toBe(60);
   });
 });
 
